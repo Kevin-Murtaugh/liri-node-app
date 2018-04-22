@@ -32,27 +32,27 @@ function buildIt() {
 };
 
 //***********written code... should govern the whole program (I think) */
-var askLiri = process.argv[3];
+var askLiri = process.argv[2];
+
 switch (askLiri) {
     case `my-tweets`:
+
         console.log("tweets");
-        var twitterHandle = {screen_name: 'coderucf'};
-  client.get('statuses/user_timeline', twitterHandle, function(error, tweets, response){
+        var twitterHandle = {screen_name: 'codeucf'};
+        client.get('statuses/user_timeline', twitterHandle, function(error, tweets, response){
     if(!error){
       for(i = 0; i<tweets.length; i++){
-        var tweetDate = tweets[i].created_at;
-//example created at:
-//"created_at": (10 spaces between quotes, 13 total)
-//"Wed Aug 27 13:08:45 +0000 2008" (30 chars between quotes, 32 total)
-        console.log("coderucf: " + tweets[i].text + " " + date.substring(0, 45));
+//        var tweetDate = tweets[i].created_at;
+
+        console.log("codeucf: " + tweets[i].text + " " + tweets[i].created_at);
         console.log("-----------------------");
         
         //adds text to log.txt file
-        fs.appendFile('log.txt', "@coderucf: " + tweets[i].text + " " + date.substring(0, 45));
+        fs.appendFile('log.txt', "@codeucf: " + tweets[i].text + "created_at:" + tweets[i].created_at.substring(0, 19));
         fs.appendFile('log.txt', "-----------------------");
       }
     }else{
-      console.log('Error occurred');
+      console.log('Error occurred',twitterHandle );
     }
 });
  //       buildIt(inputString);
