@@ -1,45 +1,87 @@
 // ***********liri like siri 
-var request = require("request");
-var dotenv = require("dotenv").config();
-var key = require("keys");
+require("dotenv").config();
+let request = require("request");
+let fs = require("fs");
+let keys = require("./keys.js");
+console.log(keys.spotify);
 
-var inputArray = process.argv;
+//start with Twitter
+let Twitter = require("twitter");
+let client = new Twitter(keys.twitter);
+
+let inputArray = process.argv;
 
 //copy the next two lines described as "access your keys information"...
-var spotify = new Spotify(keys.spotify);
-var client = new Twitter(keys.twitter);
-//**************code insertion experiment******* */
-var nodeArgs = process.argv;
-var inputString = "";
+//changed (spotify) to (node-spotify-api)
+let Spotify = require('node-spotify-api');
+let spotify = new Spotify(keys.spotify);
 
-// Loop through all the words in the node argument
-// And do a little for-loop magic to handle the inclusion of "+"s
-for (var i = 2; i < nodeArgs.length; i++) {
-  if (i > 2 && i < nodeArgs.length) {
-    inputString = inputString + "+" + nodeArgs[i];
-  }
-  else {
-    inputString += nodeArgs[i];
-  }
-}
+//**************code experiment******* */
+let nodeArgs = process.argv;
+let inputString = "";
 
-// Then run a request to the OMDB API with the movie specified
-var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+function buildIt() {
+    for (var i = 3; i < nodeArgs.length; i++) {
+        if (i > 2 && i < nodeArgs.length) {
+          inputString = inputString + "+" + nodeArgs[i];
+        }
+        else {
+          inputString += nodeArgs[i];
+        }
+    }
+};
 
-// This line is just to help us debug against the actual URL.
-console.log(queryUrl);
-//***********written code... should work at the end (I think) */
+//***********written code... should govern the whole program (I think) */
+var askLiri = process.argv[3];
 switch (askLiri) {
     case `my-tweets`:
         console.log("tweets");
+        var twitterHandle = {screen_name: 'coderucf'};
+  client.get('statuses/user_timeline', twitterHandle, function(error, tweets, response){
+    if(!error){
+      for(i = 0; i<tweets.length; i++){
+        var tweetDate = tweets[i].created_at;
+//example created at:
+//"created_at": (10 spaces between quotes, 13 total)
+//"Wed Aug 27 13:08:45 +0000 2008" (30 chars between quotes, 32 total)
+        console.log("coderucf: " + tweets[i].text + " " + date.substring(0, 45));
+        console.log("-----------------------");
+        
+        //adds text to log.txt file
+        fs.appendFile('log.txt', "@coderucf: " + tweets[i].text + " " + date.substring(0, 45));
+        fs.appendFile('log.txt', "-----------------------");
+      }
+    }else{
+      console.log('Error occurred');
+    }
+});
+ //       buildIt(inputString);
         break;
 
-    case 'spotify-this-song': 
-        console.log("song");
-        break;
+    // case 'spotify-this-song': 
+    //     console.log("song");
+    //     buildIt(inputString);
+    //     if (!error) {
+    //         // output song: artist, song-name, preview link, ,album
+    //     }
+    //     else {
+    //         // output ace of base, the sign, link & album also
+    //     }
+    //     break;
 
     case 'movie-this':
-        console.log("movie");
+        console.log("movie option reached");
+        buildIt(inputString);
+        if (nodeArgs[3] != "") {
+            //output Mr Nobody movie data
+        }
+        else {
+
+    // Then run a request to the OMDB API with the movie specified
+        var queryUrl = "http://www.omdbapi.com/?t=" + inputString + "&y=&plot=short&apikey=trilogy";
+    // 	* Title of the movie.    * Year the movie came out.    * IMDB Rating of the movie.    * Rotten Tomatoes Rating of the movie.    * Country where the movie was produced.    * Language of the movie.    * Plot of the movie.    * Actors in the movie.
+        }
+        console.log("movie", queryUrl);
         break;
     
     case `do-what-it-says`: 
@@ -47,27 +89,3 @@ switch (askLiri) {
         break;
 };
 
-var movieName = "";
-
-// Loop through all the words in the node argument
-// And do a little for-loop magic to handle the inclusion of "+"s
-for (var i = 2; i < nodeArgs.length; i++) {
-
-  if (i > 2 && i < nodeArgs.length) {
-
-    movieName = movieName + "+" + nodeArgs[i];
-
-  }
-
-  else {
-
-    movieName += nodeArgs[i];
-
-  }
-}
-
-// Then run a request to the OMDB API with the movie specified
-var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
-
-// This line is just to help us debug against the actual URL.
-console.log(queryUrl);
