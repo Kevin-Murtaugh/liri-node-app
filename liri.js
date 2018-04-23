@@ -31,6 +31,25 @@ function buildIt() {
         }
     }
 };
+function movieInfo () {     
+var omdbURL = 'http://www.omdbapi.com/?apikey=trilogy&t=' + inputString + '&plot=short';
+request(omdbURL, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+        var body = JSON.parse(body);
+        console.log(body);
+        console.log("Title: " + body.Title);
+        console.log("Release Year: " + body.Year);
+        console.log("IMdB Rating: " + body.imdbRating);
+        console.log("Rotten Tomatoes Rating: " + body.tomatoRating);
+        console.log("Country: " + body.Country);
+        console.log("Language: " + body.Language);
+        console.log("Plot: " + body.Plot);
+        console.log("Actors: " + body.Actors);
+    }
+    else {
+    console.log("movie call failed");
+    };
+});
  
 function handleRequest(liriRequest) {
     switch (liriRequest) {
@@ -43,7 +62,7 @@ function handleRequest(liriRequest) {
                         console.log("codeucf: " + tweets[i].text + "Created: " + tweets[i].created_at);
                         console.log("-----------------------");
  
-                        //adds text to log.txt file
+                        //add text to log.txt file
                         fs.appendFile('log.txt', "@codeucf: " + tweets[i].text + ".  created_at:" + tweets[i].created_at.substring(0, 19), function (error) {
                             if (error) {
                                 console.log("Error occurred when saving file", error);
@@ -80,9 +99,9 @@ function handleRequest(liriRequest) {
             buildIt(inputString);
             console.log(inputString);
  
-            // ******** code insertions  **********//
+            if (inputString != "") {
  
-            var omdbURL = 'http://www.omdbapi.com/?apikey=trilogy&t=' + inputString + '&plot=short';
+            var omdbURL = ('http://www.omdbapi.com/?apikey=trilogy&t=' + inputString + '&plot=short');
             request(omdbURL, function (error, response, body) {
                 if (!error && response.statusCode == 200) {
                     var body = JSON.parse(body);
@@ -96,13 +115,20 @@ function handleRequest(liriRequest) {
                     console.log("Plot: " + body.Plot);
                     console.log("Actors: " + body.Actors);
                 }
+                else {
+                    console.log("movie call failed");
+                };
             });
+            }
+            else {
+                console.log("If you haven't watched 'Mr. Nobody,' then you should:");
+            };
  
             //  * Title of the movie.    * Year the movie came out.    * IMDB Rating of the movie.    * Rotten Tomatoes Rating of the movie.    * Country where the movie was produced.    * Language of the movie.    * Plot of the movie.    * Actors in the movie.
             break;
  
         case 'do-what-it-says':
-            console.log("do it");
+//          console.log("do it");
             fs.readFile('random.txt', 'utf8', function (error, data) {
                 if (error) {
                     console.log("Error while reading file.");
@@ -110,13 +136,11 @@ function handleRequest(liriRequest) {
                     var res = data.split(',');
                     inputString = res[1];
                     handleRequest(res[0]);
-                }
+                };
             });
             break;
+        };
     };
-}
- 
-//***********written code... should govern the whole program (I think) */
 var askLiri = process.argv[2];
  
 handleRequest(askLiri);
