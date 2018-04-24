@@ -4,7 +4,7 @@ let request = require("request");
 let fs = require("fs");
 let keys = require("./keys.js");
 let exec = require('child_process').exec;
-console.log(keys.spotify);
+
 
 //start with Twitter
 let Twitter = require("twitter");
@@ -13,7 +13,6 @@ let client = new Twitter(keys.twitter);
 let inputArray = process.argv;
 
 //copy the next two lines described as "access your keys information"...
-//changed (spotify) to (node-spotify-api)
 let Spotify = require('node-spotify-api');
 let spotify = new Spotify(keys.spotify);
 
@@ -83,8 +82,8 @@ function handleRequest(liriRequest) {
             break;
 
         case 'spotify-this-song':
-            console.log("song", process.argv[3]);
-            if (process.argv[3] = "+") {
+            buildIt (inputString);
+            if (process.argv[3] ="+" || inputString === "") {
                 inputString = inputString ? inputString : 'the sign%20ace of base'
                 spotify.search({ type: 'track,artist', query: inputString, limit: "1" }, function (err, data) {
                     console.log("Artists: " + data.tracks.items[0].album.artists[0].name);
@@ -94,7 +93,6 @@ function handleRequest(liriRequest) {
                 });
             } else {
                 buildIt(inputString);
-                console.log(inputString);
                 spotify.search({ type: 'track,artist', query: inputString, limit: "1" }, function (err, data) {
                     console.log("Artists: " + data.tracks.items[0].album.artists[0].name);
                     console.log("Song Title: " + data.tracks.items[0].name);
@@ -105,42 +103,18 @@ function handleRequest(liriRequest) {
             break;
 
         case 'movie-this':
-            console.log("movie option reached");
             buildIt(inputString);
-            console.log(inputString);
-
             if (inputString != "") {
                 movieInfo();
-                // let omdbURL = ('http://www.omdbapi.com/?apikey=trilogy&t=' + inputString + '&plot=short');
-                // request(omdbURL, function (error, response, body) {
-                //     if (!error && response.statusCode == 200) {
-                //         let body = JSON.parse(body);
-                //         console.log(body);
-                //         console.log("Title: " + body.Title);
-                //         console.log("Release Year: " + body.Year);
-                //         console.log("IMdB Rating: " + body.imdbRating);
-                //         console.log("Rotten Tomatoes Rating: " + body.tomatoRating);
-                //         console.log("Country: " + body.Country);
-                //         console.log("Language: " + body.Language);
-                //         console.log("Plot: " + body.Plot);
-                //         console.log("Actors: " + body.Actors);
-                //     }
-                //     else {
-                //         console.log("movie call failed");
-                //     };
-                // });
             }
             else {
                 console.log("If you haven't watched 'Mr. Nobody,' then you should:");
                 inputString="Mr. Nobody"
                 movieInfo();
             };
-
-            //  * Title of the movie.    * Year the movie came out.    * IMDB Rating of the movie.    * Rotten Tomatoes Rating of the movie.    * Country where the movie was produced.    * Language of the movie.    * Plot of the movie.    * Actors in the movie.
             break;
 
         case 'do-what-it-says':
-            //          console.log("do it");
             fs.readFile('random.txt', 'utf8', function (error, data) {
                 if (error) {
                     console.log("Error while reading file.");
