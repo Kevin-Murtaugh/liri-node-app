@@ -54,3 +54,14 @@ to handle once identified.
 
 Outputs went to the screen & also to a text files (in the case of Twitter) which
 should make it slightly easier to confirm the results.
+
+Uploaded videos of each aspect of the project fully functioning.
+Links to ScreenToGif recordings to be embedded in this file...
+
+Link to Spotify feature: [https://github.com/Kevin-Murtaugh/liri-node-app/blob/master/screen%20to%20gif%2C%20liri%20spotify.gif
+]
+
+Link to movie feature: [https://github.com/Kevin-Murtaugh/liri-node-app/blob/master/screen%20to%20gif%2C%20liri%20movie.gif]
+
+Link to Twitter feature:[https://github.com/Kevin-Murtaugh/liri-node-app/blob/master/screen%20to%20gif%2C%20liri%20my-tweets.gif]
+
